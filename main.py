@@ -28,6 +28,7 @@ def mirs():
 
     df_liebherr = df[["manufacturer", "sku", "quantity", "price"]]
     df_liebherr = df_liebherr[df_liebherr["manufacturer"] == 'Liebherr']
+    # df_liebherr = df_liebherr[df_liebherr["sku"].replace(' ', '')]
     df_liebherr = df_liebherr.loc[9:]
 
     df_falmec = df[["manufacturer", "sku", "quantity", "price"]]
@@ -182,33 +183,23 @@ def update_blanco_onsite():
         time.sleep(1)
         password_input.send_keys(Keys.ENTER)
         time.sleep(1)
-        file000_input = browser.find_element(By.XPATH,
-                                             '/html/body/div[1]/div[2]/div[3]/div[1]/div[6]/div[3]/form/section/table/tbody/tr[1]/td/input[1]').send_keys(
-            r'C:\Python\Update_Eurotec\blanco_000.csv')
+        file000_input = browser.find_element(By.ID,'upload').send_keys(r'C:\Python\Update_Eurotec\blanco_000.csv')
         time.sleep(3)
-        checkbox_update000 = browser.find_element(By.XPATH,
-                                                  '/html/body/div[1]/div[2]/div[3]/div[1]/div[6]/div[3]/form/section/table/tbody/tr[2]/td/input[2]').click()
+        checkbox_update000 = browser.find_element(By.ID,'woocommerce-importer-update-existing').click()
         time.sleep(1)
-        submit_file000_input = browser.find_element(By.XPATH,
-                                                    '/html/body/div[1]/div[2]/div[3]/div[1]/div[6]/div[3]/form/div/button').click()
+        submit_file000_input = browser.find_element(By.XPATH,'//*[@id="wpbody-content"]/div[6]/div[4]/form/div/button').click()
         time.sleep(5)
-        submit_file000 = browser.find_element(By.XPATH,
-                                              '/html/body/div[1]/div[2]/div[3]/div[1]/div[6]/div[3]/form/div/button').click()
+        submit_file000 = browser.find_element(By.XPATH,'//*[@id="wpbody-content"]/div[6]/div[4]/form/div/button').click()
         time.sleep(60)
         browser.get('https://blanco-ukraine.com.ua/wp-admin/edit.php?post_type=product&page=product_importer#/')
         time.sleep(2)
-        file000_input = browser.find_element(By.XPATH,
-                                             '/html/body/div[1]/div[2]/div[3]/div[1]/div[6]/div[3]/form/section/table/tbody/tr[1]/td/input[1]').send_keys(
-            r'C:\Python\Update_Eurotec\blanco_update.csv')
+        file_input = browser.find_element(By.ID,'upload').send_keys(r'C:\Python\Update_Eurotec\blanco_update.csv')
         time.sleep(3)
-        checkbox_update000 = browser.find_element(By.XPATH,
-                                                  '/html/body/div[1]/div[2]/div[3]/div[1]/div[6]/div[3]/form/section/table/tbody/tr[2]/td/input[2]').click()
+        checkbox_update = browser.find_element(By.ID,'woocommerce-importer-update-existing').click()
         time.sleep(1)
-        submit_file000_input = browser.find_element(By.XPATH,
-                                                    '/html/body/div[1]/div[2]/div[3]/div[1]/div[6]/div[3]/form/div/button').click()
+        submit_file000_input = browser.find_element(By.XPATH,'//*[@id="wpbody-content"]/div[6]/div[4]/form/div/button').click()
         time.sleep(5)
-        submit_file000 = browser.find_element(By.XPATH,
-                                              '/html/body/div[1]/div[2]/div[3]/div[1]/div[6]/div[3]/form/div/button').click()
+        submit_file000 = browser.find_element(By.XPATH,'//*[@id="wpbody-content"]/div[6]/div[4]/form/div/button').click()
         time.sleep(60)
 
     except Exception as ex:
@@ -220,11 +211,16 @@ def start():
     starttime = datetime.datetime.now()
 
     mirs()
-    bsh()
+    #bsh()
     franke()
-    teka()
+    #teka()
 
-    df = pd.concat([df_mirs, df_bsh, df_franke, df_teka], axis=0)
+    df = pd.concat([
+        df_mirs,
+        #df_bsh,
+        df_franke,
+        #df_teka
+    ], axis=0)
     df = df.reset_index(drop=True)
     df.to_csv("eurotec_update.csv")
 
@@ -232,8 +228,8 @@ def start():
 
     update_eurotec_onsite()
     print('EuroTec - OK')
-    update_blanco_onsite()
-    print('Blanco - OK')
+    # update_blanco_onsite()
+    # print('Blanco - OK')
 
     diftime = datetime.datetime.now() - starttime
     print(diftime)
